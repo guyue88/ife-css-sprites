@@ -20,7 +20,7 @@ class FORP {
 		/* 如果想要得到最佳值，heightStep = 1 而且 sampleMax >= 160，但这会消耗很大性能 */
 		const heightStep = 1;
 		/* 样本个数 */
-		const sampleMax = 16;
+		const sampleMax = 100;
 		const best = this.sampling({
 			best: { u: 0 },
 			sampleIndex: 0,

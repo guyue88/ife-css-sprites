@@ -1,5 +1,5 @@
 # IFE Css Sprites
-auto sprite images.
+自动生成css 雪碧图工具。
 
-# Live Site
-![IFE Css Sprites](http://tool.luodao.me/css-sprite)
+# 在线体验
+[IFE Css Sprites](http://tool.luodao.me/css-sprite)

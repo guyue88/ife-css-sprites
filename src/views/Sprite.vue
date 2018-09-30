@@ -100,6 +100,9 @@
 				</div>
 			</div>
 		</div>
+		<footer>
+			Designed by <a href="https://www.luodao.me">罗导</a>
+		</footer>
 	</div>
 </template>
 
@@ -119,7 +122,7 @@ export default {
 				active: false,
 			}],
 			images: [],
-			distance: 20,
+			distance: 10,
 			typeList: ['minimize', 'horizontal', 'vertical'],
 			type: 'minimize', // 合成方式，minimize、vertical、horizontal
 			canvasWidth: 640,
@@ -283,7 +286,7 @@ export default {
 				code: `.${item.name} {
 	width: ${item.width}px;
 	height: ${item.height}px;
-	background: url('sprites.png') -${item.x}px -${item.y}px;
+	background: url('sprites.png') ${item.x === 0 ? '' : '-'}${item.x}px ${item.y === 0 ? '' : '-'}${item.y}px;
 }`,
 			}));
 		},
@@ -549,6 +552,15 @@ export default {
 				height: 16px;
 				background: url(http://p3.qhimg.com/t0167c2250d8178548f.png) no-repeat 0px -15px;
 				background-size: cover;
+			}
+		}
+		footer{
+			text-align: center;
+			color: #666;
+			margin-top: 80px;
+			padding: 20px 0;
+			a{
+				color: #496fa7;
 			}
 		}
 	}

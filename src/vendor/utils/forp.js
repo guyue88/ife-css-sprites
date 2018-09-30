@@ -17,7 +17,7 @@ class FORP {
 				w: item[0] + space,
 				h: item[1] + space,
 				p: index,
-			}
+			};
 		});
 		boxlist = FORP.sortByHeight(boxlist);
 		const highestBox = boxlist[0];
@@ -27,7 +27,7 @@ class FORP {
 		const heightStep = 1;
 		const best = this.sampling({
 			best: {
-				u: 0
+				u: 0,
 			},
 			sampleIndex: 0,
 			boxlist,

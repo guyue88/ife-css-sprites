@@ -2,7 +2,7 @@
 	<div class="css-sprite">
 		<h1 class="title">IFE CSS Sprites Tools</h1>
 		<div class="sub-title">
-			Upload your images blow and auto generate css sprites image. 
+			Upload your images blow and auto generate css sprites image.
 		</div>
 		<div class="wrap">
 			<div class="maker">
@@ -53,6 +53,9 @@
 						</div>
 					</div>
 				</div>
+				<div class="notice">
+					Note: Please don’t upload huge files. That’s not the purpose of sprites technique.
+				</div>
 			</div>
 			<div class="setting">
 				<h2 class="setting-title">Setting</h2>
@@ -67,11 +70,6 @@
 								<input type="number" v-model="distance">
 							</div>
 						</div>
-						<div class="apply-change">
-							<button class="btn set-distance" type="button" @click="reDraw">
-								Apply changes
-							</button>
-						</div>
 					</li>
 					<li>
 						<h4>ALIGN ELEMENT</h4>
@@ -85,6 +83,21 @@
 								</button>
 							</div>
 						</div>
+					</li>
+					<li>
+						<h4>ZOOM ELEMENT</h4>
+						<div class="control-group">
+							<label class="label">
+								zoom:
+							</label>
+							<div class="controls">
+								<button type="button" class="btn btn-group" v-for="item in zoomList" :key="item.value" :class="{active: item.value === zoom}" @click="setZoom(item.value)">
+									{{item.text}}
+								</button>
+							</div>
+						</div>
+					</li>
+					<li>
 						<div class="apply-change">
 							<button class="btn set-distance" type="button" @click="reDraw">
 								Apply changes
@@ -99,9 +112,6 @@
 					</a>
 				</div>
 			</div>
-		</div>
-		<div class="notice">
-			Note: Please don’t upload huge files. That’s not the purpose of sprites technique.
 		</div>
 		<footer>
 			Designed & implement by <a href="https://www.luodao.me">Luo Dao</a>
@@ -128,6 +138,17 @@ export default {
 			distance: 2,
 			typeList: ['minimize', 'horizontal', 'vertical'],
 			type: 'minimize', // 合成方式，minimize、vertical、horizontal
+			zoomList: [{
+				text: '1X',
+				value: 1,
+			}, {
+				text: '2X',
+				value: 2,
+			}, {
+				text: '4X',
+				value: 4,
+			}],
+			zoom: 2,
 			canvasWidth: 640,
 			canvasHeight: 350,
 			downloadLink: '###',
@@ -266,7 +287,7 @@ export default {
 			}) => {
 				this.drawImages(ctx, { images, position });
 				this.downloadLink = canvas.toDataURL();
-				this.buildStyle(images, position);
+				this.buildStyle(images, position, this.zoom, this.canvasWidth, this.canvasHeight);
 			});
 		},
 		/* 将图片按照计算好的方式绘制到canvas */
@@ -277,30 +298,48 @@ export default {
 			});
 		},
 		/* 生成css样式 */
-		buildStyle(images, position) {
+		buildStyle(images, position, zoom, canvasWidth, canvasHeight) {
 			position.forEach((item) => {
 				const index = item.p;
 				images[index].x = item.x;
 				images[index].y = item.y;
 			});
-			this.styles = images.map(item => ({
-				w: item.width > 95 ? 95 : item.width,
-				h: item.height > 95 ? 95 : item.height,
-				img: item.url,
-				code: `.${item.name} {
-	width: ${item.width}px;
-	height: ${item.height}px;
-	background: url('sprites.png') ${item.x === 0 ? '' : '-'}${item.x}px ${item.y === 0 ? '' : '-'}${item.y}px;
-}`,
-			}));
+			const imageWidth = this.fixNum(canvasWidth / zoom);
+			const imageHeight = this.fixNum(canvasHeight / zoom);
+			this.styles = images.map((item) => {
+				let code = `.${item.name} {\n` +
+					`\twidth: ${this.fixNum(item.width / zoom)}px;\n` +
+					`\theight: ${this.fixNum(item.height / zoom)}px;\n` +
+					`\tbackground: url('sprites.png') ${item.x === 0 ? '' : '-'}${this.fixNum(item.x / zoom)}px ` +
+					`${item.y === 0 ? '' : '-'}${this.fixNum(item.y / zoom)}px;\n`;
+
+				if (zoom !== 1) {
+					code += `\tbackground-size: ${imageWidth}px ${imageHeight}px;\n`;
+				}
+				code += '}';
+				return {
+					w: item.width > 95 ? 95 : item.width,
+					h: item.height > 95 ? 95 : item.height,
+					img: item.url,
+					code,
+				};
+			});
 		},
 		/* 选择排列方式 */
 		setType(type) {
 			this.type = type;
 		},
+		/* 设置放大比例 */
+		setZoom(zoom) {
+			this.zoom = zoom;
+		},
 		reDraw() {
 			if (!this.hasImage) return;
 			this.draw(this.images, this.distance - 0, this.type);
+		},
+		fixNum(num, pointLength = 3) {
+			num = +num;
+			return +num.toFixed(pointLength);
 		},
 	},
 };

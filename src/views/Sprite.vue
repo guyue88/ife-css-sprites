@@ -1,8 +1,8 @@
 <template>
 	<div class="css-sprite">
 		<h1 class="title">IFE CSS Sprites Tools</h1>
-		<div class="tip">
-			Upload your images. (Note: Please don’t upload huge files. That’s not the purpose of sprites technique.)
+		<div class="sub-title">
+			Upload your images blow and auto generate css sprites image. 
 		</div>
 		<div class="wrap">
 			<div class="maker">
@@ -12,7 +12,7 @@
 					</li>
 				</ul>
 				<div class="area-item" v-for="(tab, index) in tabs" :class="{active: tab.active}" :key="index">
-					<div class="canvas-area" v-if="tab.title === 'canvas'">
+					<div class="canvas-area" v-if="tab.title === 'workspace'">
 						<div class="no-image" v-show="!hasImage">
 							<img src="http://s7.qhres.com/static/e9f9fdb2a8a9dbbd.svg" height="40px"/>
 							<p>No images uploaded yet!</p>
@@ -100,8 +100,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="notice">
+			Note: Please don’t upload huge files. That’s not the purpose of sprites technique.
+		</div>
 		<footer>
-			Designed by <a href="https://www.luodao.me">罗导</a>
+			Designed & implement by <a href="https://www.luodao.me">Luo Dao</a>
 		</footer>
 	</div>
 </template>
@@ -115,14 +118,14 @@ export default {
 		return {
 			timer: null,
 			tabs: [{
-				title: 'canvas',
+				title: 'workspace',
 				active: true,
 			}, {
 				title: 'css',
 				active: false,
 			}],
 			images: [],
-			distance: 10,
+			distance: 2,
 			typeList: ['minimize', 'horizontal', 'vertical'],
 			type: 'minimize', // 合成方式，minimize、vertical、horizontal
 			canvasWidth: 640,
@@ -253,6 +256,7 @@ export default {
 				setTimeout(() => {
 					const canvas = this.$refs.canvas[0];
 					const ctx = canvas.getContext('2d');
+					ctx.clearRect(0, 0, result.w, result.h);
 					resolve({
 						ctx, images, canvas, position: result.l,
 					});
@@ -327,7 +331,7 @@ export default {
 				font-size: 12px;
 			}
 		}
-		.title, .tip{
+		.title, .sub-title{
 			text-align: center;
 		}
 		.wrap{
@@ -553,6 +557,10 @@ export default {
 				background: url(http://p3.qhimg.com/t0167c2250d8178548f.png) no-repeat 0px -15px;
 				background-size: cover;
 			}
+		}
+		.notice{
+			margin-top: 8px;
+			color: #999;
 		}
 		footer{
 			text-align: center;

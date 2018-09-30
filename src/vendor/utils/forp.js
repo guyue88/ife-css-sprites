@@ -4,25 +4,31 @@
  */
 class FORP {
 	constructor(list, space) {
-		space = space || 0;
+		space = space - 0 || 0;
 		return this.run(list, space);
 	}
 
 	run(list, space) {
-		let boxlist = list.map((item, index) => ({
-			w: item[0] + space,
-			h: item[1] + space,
-			p: index,
-		}));
+		/* 样本个数，最多为所有矩形高的和减去最高矩形的高 */
+		let sampleMax = 0;
+		let boxlist = list.map((item, index) => {
+			sampleMax += item[1] + space;
+			return {
+				w: item[0] + space,
+				h: item[1] + space,
+				p: index,
+			}
+		});
 		boxlist = FORP.sortByHeight(boxlist);
 		const highestBox = boxlist[0];
 		const boxHeight = highestBox.h;
-		/* 如果想要得到最佳值，heightStep = 1 而且 sampleMax >= 160，但这会消耗很大性能 */
+		sampleMax = sampleMax - space - boxHeight;
+		/* 如果想要得到最佳值，heightStep = 1，而且sampleMax为所有矩形高的和减去最高矩形的高，但这会消耗很大性能 */
 		const heightStep = 1;
-		/* 样本个数 */
-		const sampleMax = 100;
 		const best = this.sampling({
-			best: { u: 0 },
+			best: {
+				u: 0
+			},
 			sampleIndex: 0,
 			boxlist,
 			boxHeight,
@@ -37,7 +43,12 @@ class FORP {
 
 	/* 采样 */
 	sampling({
-		best, boxlist, boxHeight, heightStep, sampleMax, sampleIndex,
+		best,
+		boxlist,
+		boxHeight,
+		heightStep,
+		sampleMax,
+		sampleIndex,
 	}) {
 		const temp = FORP.palce(boxlist, boxHeight + heightStep * sampleIndex);
 		/* console.log("样本%d: 利用率:%.3f, 宽度:%d, 高度:%d", sampleIndex, temp.u, temp.w, temp.h); */
@@ -47,13 +58,18 @@ class FORP {
 		}
 
 		/* 如果利用率大于0.9或已找到最优解，立即结束 */
-		if (best.u >= 0.9) {
+		if (best.u >= 0.95) {
 			return best;
 		}
 		sampleIndex++;
 		if (sampleIndex < sampleMax) {
 			return this.sampling({
-				best, boxlist, boxHeight, heightStep, sampleMax, sampleIndex,
+				best,
+				boxlist,
+				boxHeight,
+				heightStep,
+				sampleMax,
+				sampleIndex,
 			});
 		}
 		return best;
@@ -90,22 +106,22 @@ class FORP {
 		if (highestBox.h < box.h) {
 			temp.push({
 				x: 0,
-				y: 0,
+				y: highestBox.h,
 				w: highestBox.w,
 				h: box.h - highestBox.h,
 			});
 		}
 
 		/*
-		* 核心算法理念：
-		* 判断矩形能不能放到box的最左且最高的空余位置，如果可以就放
-		* 如果不行，就放在box的右边，盒子容器宽度延长
-		*/
+		 * 核心算法理念：
+		 * 判断矩形能不能放到box的最左且最高的空余位置，如果可以就放
+		 * 如果不行，就放在box的右边，盒子容器宽度延长
+		 */
 		for (let i = 1, len = boxlist.length; i < len; i++) {
 			const rect = boxlist[i];
 			/* 查找可以在顶部存放新矩形的列表位置 */
 			let pos = -1;
-			const tempNew = [...temp];
+			const tempNew = Object.assign([], temp);
 			for (let j = 0, l = temp.length; j < l; j++) {
 				const t = temp[j];
 				if (rect.w <= t.w && rect.h <= t.h) {
@@ -126,7 +142,7 @@ class FORP {
 						t1.w -= rect.w;
 						tempNew[j] = t1;
 					} else {
-						tempNew.splice(j, 0, {
+						tempNew.splice(j, 1, {
 							x: t.x,
 							y: t.y + rect.h,
 							w: rect.w,
@@ -150,7 +166,7 @@ class FORP {
 					x: box.w,
 					y: 0,
 				});
-				if (box.h - rect.h > 0) {
+				if (rect.h < box.h) {
 					tempNew.push({
 						x: box.w,
 						y: rect.h,

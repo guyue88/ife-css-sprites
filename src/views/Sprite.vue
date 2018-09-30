@@ -58,7 +58,10 @@
 				</div>
 			</div>
 			<div class="setting">
-				<h2 class="setting-title">Setting</h2>
+				<h2 class="setting-title">
+					Setting
+					<button class="btn remake" type="button" @click="remake">RE MAKE</button>
+				</h2>
 				<ul class="setting-cont">
 					<li>
 						<h4>DISTANCE SETTING</h4>
@@ -126,7 +129,6 @@ export default {
 	name: 'CssSprite',
 	data() {
 		return {
-			timer: null,
 			tabs: [{
 				title: 'workspace',
 				active: true,
@@ -341,6 +343,12 @@ export default {
 			num = +num;
 			return +num.toFixed(pointLength);
 		},
+		/* 重做 */
+		remake() {
+			this.images = [];
+			this.downloadLink = '###';
+			this.styles = [];
+		},
 	},
 };
 </script>
@@ -500,6 +508,9 @@ export default {
 			border-radius: 3px;
 			padding: 15px;
 
+			.remake{
+				float: right;
+			}
 			.setting-title{
 				padding: 0;
 				margin: 0;

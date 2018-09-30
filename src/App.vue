@@ -43,6 +43,17 @@ ul,li {
 	-ms-flex-align: center;
 	align-items: center;
 }
+/*clearfix*/
+.clearfix {
+	zoom: 1;
+}
+.clearfix::after {
+	clear: both;
+	content: ' ';
+	display: block;
+	line-height: 0;
+	visibility: hidden;
+}
 #app {
 	height: 100%;
 }

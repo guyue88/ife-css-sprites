@@ -2,7 +2,7 @@
 	<div class="css-sprite">
 		<h1 class="title">IFE CSS Sprites Tools</h1>
 		<div class="sub-title">
-			Upload your images blow and auto generate css sprites image.
+			Upload your images blow,then auto generate css sprites image.
 		</div>
 		<div class="wrap">
 			<div class="maker">

@@ -1,6 +1,10 @@
 /**
  * 求解矩形最小面积拼接方法
+ * @date 2018-9-30
+ * @author luodao
+ * @site https://github.com/AspenLuoQiang/ife-css-sprites
  * @params list {array} 矩形列表
+ * @params space {number} 矩形之间的空隙
  */
 class FORP {
 	constructor(list, space) {

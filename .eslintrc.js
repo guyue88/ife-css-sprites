@@ -15,6 +15,7 @@ module.exports = {
 		'no-param-reassign': 'off',
 		'no-plusplus': 'off',
 		'no-mixed-operators': 'off',
+		'no-underscore-dangle': 'off',
 	},
 
 	parserOptions: {

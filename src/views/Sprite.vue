@@ -319,6 +319,7 @@ export default {
 					code += `\tbackground-size: ${imageWidth}px ${imageHeight}px;\n`;
 				}
 				code += '}';
+				code = code.replace(/0px/g, 0);
 				return {
 					w: item.width > 95 ? 95 : item.width,
 					h: item.height > 95 ? 95 : item.height,

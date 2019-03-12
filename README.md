@@ -1,5 +1,8 @@
 # IFE Css Sprites
 自动生成css 雪碧图工具。
+# 安装&启动
+1. `git clone git@github.com:AspenLuoQiang/ife-css-sprites.git`
+2. `npm run dev` or `npm run build`
 
 # 在线体验
 [IFE Css Sprites](http://tool.luodao.me/css-sprite)
